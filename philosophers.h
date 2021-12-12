@@ -25,13 +25,22 @@ typedef struct s_data
 
 typedef struct s_philo
 {
-    /*
+	int				id;
+	int				meal_nbr;
+	pthread_mutex_t	fork;
+	int				is_eating;
+	long long		last_meal;
+	pthread_t		philo;
+	t_data			*data;
+	struct s_philo	*next;
+}	t_philo;
 
-    */
-    //this struct will contain data for each philo
-} t_philo;
 
 //----------------- UTILS FUNCTIONS ---------------//
-long long get_timeNow();
+long long get_timenow();
+
+int	exit_error(char *msg, int status);
+
+void	ft_usleep(long long sleep_time);
 
 #endif

@@ -1,6 +1,17 @@
-#ifndef MINISHELL_H
-# define MINISHELL_H
-# include "libft/libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mhalli <mhalli@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/21 21:41:42 by mhalli            #+#    #+#             */
+/*   Updated: 2021/12/21 21:44:58 by mhalli           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PHILOSOPHERS_H
+# define PHILOSOPHERS_H
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -10,37 +21,37 @@
 
 typedef struct s_data
 {
-	//• The program should take the following arguments: number_of_philosophers time_to_die 
-	//time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]
-    //this struct contain informations about the simulation
-    int	philos;
-	int timeto_die;
-	int timeto_eat;
-	int timeto_sleep;
-	int meals;
-	long long init_time;
-	pthread_mutex_t write;
-
-} t_data;
+	int				philos;
+	int				die_time;
+	int				timeto_eat;
+	int				timeto_sleep;
+	int				meals;
+	long long		init_time;
+	pthread_mutex_t	write;
+}	t_data;
 
 typedef struct s_philo
 {
 	int				id;
 	int				meal_nbr;
-	pthread_mutex_t	fork;
 	int				is_eating;
-	long long		last_meal;
+	long long		lst_meal;
+	pthread_mutex_t	fork;
 	pthread_t		philo;
 	t_data			*data;
 	struct s_philo	*next;
 }	t_philo;
 
+long long	timenow(void);
 
-//----------------- UTILS FUNCTIONS ---------------//
-long long get_timenow();
-
-int	exit_error(char *msg, int status);
-
-void	ft_usleep(long long sleep_time);
+int			exit_error(char *msg, int status);
+void		ft_usleep(long long sleep_time);
+int			free_philos(t_data *data, t_philo *philos);
+int			ft_atoi(const char *str);
+int			ft_isdigit(int c);
+size_t		ft_strlen(const char *s);
+void		philo_write(t_data *data, char *msg, int philo_id, int lock);
+t_data		*init_simulation(char **data, int argc);
+t_philo		*init_philos(t_data *data);
 
 #endif

@@ -1,6 +1,5 @@
 NAME = philo
 
-LIBS = libft.a
 
 SRCS = philosophers.c utils.c init.c \
 	philo_utils/ph_atoi.c\
@@ -9,11 +8,11 @@ SRCS = philosophers.c utils.c init.c \
 
 FLAGS = -Wall -Wextra -Werror
 
-SANITIZE = -fsanitize=address -g
+# SANITIZE = -fsanitize=address -g
 
-all: $(NAME)
+all: $(NAME) 
 
-$(NAME):
+$(NAME): $(SRCS)
 	@gcc $(FLAGS) $(SRCS) -lpthread -o $(NAME)
 
 clean:

@@ -6,7 +6,7 @@
 /*   By: mhalli <mhalli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 21:39:17 by mhalli            #+#    #+#             */
-/*   Updated: 2021/12/21 21:40:52 by mhalli           ###   ########.fr       */
+/*   Updated: 2022/02/22 09:44:25 by mhalli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	create_philo(int philo_nbr, t_data *data, t_philo *philo)
 {
 	philo->id = philo_nbr;
 	philo->meal_nbr = 0;
-	philo->is_eating = 0;
 	philo->lst_meal = data->init_time;
 	philo->data = data;
 	pthread_mutex_init(&philo->fork, NULL);
@@ -61,7 +60,7 @@ int	filter_data(char **data)
 		j = -1;
 		while (data[i][++j])
 		{
-			if (data[i][0] == '-' || !ft_isdigit(data[i][j])
+			if (!ft_isdigit(data[i][j])
 					|| ft_strlen(data[i]) > 10
 				|| (j == 9 && strcmp(data[i], "2147483647") > 0))
 				return (0);
@@ -86,5 +85,6 @@ t_data	*init_simulation(char **data, int argc)
 	if (argc > 5)
 		simulation_data->meals = ft_atoi(data[5]);
 	pthread_mutex_init(&simulation_data->write, NULL);
+	pthread_mutex_init(&simulation_data->is_eating, NULL);
 	return (simulation_data);
 }

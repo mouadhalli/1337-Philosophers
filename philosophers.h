@@ -6,7 +6,7 @@
 /*   By: mhalli <mhalli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 21:41:42 by mhalli            #+#    #+#             */
-/*   Updated: 2021/12/21 21:44:58 by mhalli           ###   ########.fr       */
+/*   Updated: 2022/02/22 10:25:25 by mhalli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@ typedef struct s_data
 	int				meals;
 	long long		init_time;
 	pthread_mutex_t	write;
+	pthread_mutex_t	is_eating;
 }	t_data;
 
 typedef struct s_philo
 {
 	int				id;
 	int				meal_nbr;
-	int				is_eating;
 	long long		lst_meal;
 	pthread_mutex_t	fork;
 	pthread_t		philo;

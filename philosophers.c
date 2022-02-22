@@ -6,13 +6,13 @@
 /*   By: mhalli <mhalli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 18:23:44 by mhalli            #+#    #+#             */
-/*   Updated: 2021/12/21 21:37:53 by mhalli           ###   ########.fr       */
+/*   Updated: 2022/02/22 10:35:08 by mhalli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	*daily_routine(void	*philo_data)
+void	*deadly_routine(void	*philo_data)
 {
 	t_philo	*philo;
 
@@ -23,11 +23,16 @@ void	*daily_routine(void	*philo_data)
 		philo_write(philo->data, "took a fork", philo->id, 0);
 		pthread_mutex_lock(&philo->next->fork);
 		philo_write(philo->data, "is eating", philo->id, 0);
-		philo->is_eating = 1;
+		// philo->is_eating = 1;
+		pthread_mutex_lock(&philo->data->is_eating);
+
+		pthread_mutex_lock(&philo->data->is_eating);
 		philo->lst_meal = timenow();
-		philo->is_eating = 0;
+		// philo->is_eating = 0;
+		pthread_mutex_unlock(&philo->data->is_eating);
 		ft_usleep(philo->data->timeto_eat);
 		philo->meal_nbr += 1;
+		pthread_mutex_unlock(&philo->data->is_eating);
 		pthread_mutex_unlock(&philo->fork);
 		pthread_mutex_unlock(&philo->next->fork);
 		philo_write(philo->data, "is sleeping", philo->id, 0);
@@ -46,8 +51,8 @@ void	start_simulation(t_philo *philos)
 	philo_nbr = 1;
 	while (philo_nbr <= philos->data->philos)
 	{
-		pthread_create(&philos->philo, NULL, &daily_routine, philos);
-		usleep(50);
+		pthread_create(&philos->philo, NULL, &deadly_routine, philos);
+		usleep(55);
 		philos = philos->next;
 		philo_nbr++;
 	}
@@ -69,15 +74,14 @@ int	main(int argc, char **argv)
 	start_simulation(phil);
 	while (phil->data->philos != 0)
 	{
-		if (phil->is_eating == 0)
+		pthread_mutex_lock(&phil->data->is_eating);
+		if (phil->id && (timenow() - phil->lst_meal > phil->data->die_time))
 		{
-			if (phil->id && (timenow() - phil->lst_meal > phil->data->die_time))
-			{
-				philo_write(phil->data, "died", phil->id, 1);
-				return (free_philos(data, phil));
-			}
-			phil = phil->next;
+			philo_write(phil->data, "died", phil->id, 1);
+			return (free_philos(data, phil));
 		}
+		pthread_mutex_unlock(&phil->data->is_eating);
+		phil = phil->next;
 	}
 	return (free_philos(data, phil));
 }

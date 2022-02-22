@@ -6,7 +6,7 @@
 /*   By: mhalli <mhalli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 21:45:19 by mhalli            #+#    #+#             */
-/*   Updated: 2021/12/21 21:47:15 by mhalli           ###   ########.fr       */
+/*   Updated: 2022/02/22 09:43:37 by mhalli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	free_philos(t_data *data, t_philo *philos)
 	free(head);
 	philos = NULL;
 	pthread_mutex_destroy(&data->write);
+	pthread_mutex_destroy(&data->is_eating);
 	free(data);
 	data = NULL;
 	return (0);

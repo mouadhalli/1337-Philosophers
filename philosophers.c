@@ -6,7 +6,7 @@
 /*   By: mhalli <mhalli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 18:23:44 by mhalli            #+#    #+#             */
-/*   Updated: 2022/02/22 10:35:08 by mhalli           ###   ########.fr       */
+/*   Updated: 2022/02/22 10:37:24 by mhalli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ void	*deadly_routine(void	*philo_data)
 		philo_write(philo->data, "is eating", philo->id, 0);
 		// philo->is_eating = 1;
 		pthread_mutex_lock(&philo->data->is_eating);
-
-		pthread_mutex_lock(&philo->data->is_eating);
 		philo->lst_meal = timenow();
-		// philo->is_eating = 0;
 		pthread_mutex_unlock(&philo->data->is_eating);
+		// philo->is_eating = 0;
 		ft_usleep(philo->data->timeto_eat);
 		philo->meal_nbr += 1;
 		pthread_mutex_unlock(&philo->data->is_eating);

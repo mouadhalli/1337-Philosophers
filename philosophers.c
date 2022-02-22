@@ -6,7 +6,7 @@
 /*   By: mhalli <mhalli@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/20 18:23:44 by mhalli            #+#    #+#             */
-/*   Updated: 2022/02/22 10:37:24 by mhalli           ###   ########.fr       */
+/*   Updated: 2022/02/22 11:17:38 by mhalli           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,11 @@ void	*deadly_routine(void	*philo_data)
 		philo_write(philo->data, "took a fork", philo->id, 0);
 		pthread_mutex_lock(&philo->next->fork);
 		philo_write(philo->data, "is eating", philo->id, 0);
-		// philo->is_eating = 1;
 		pthread_mutex_lock(&philo->data->is_eating);
 		philo->lst_meal = timenow();
 		pthread_mutex_unlock(&philo->data->is_eating);
-		// philo->is_eating = 0;
 		ft_usleep(philo->data->timeto_eat);
 		philo->meal_nbr += 1;
-		pthread_mutex_unlock(&philo->data->is_eating);
 		pthread_mutex_unlock(&philo->fork);
 		pthread_mutex_unlock(&philo->next->fork);
 		philo_write(philo->data, "is sleeping", philo->id, 0);
@@ -47,11 +44,11 @@ void	start_simulation(t_philo *philos)
 	int		philo_nbr;
 
 	philo_nbr = 1;
+	
 	while (philo_nbr <= philos->data->philos)
 	{
 		pthread_create(&philos->philo, NULL, &deadly_routine, philos);
 		usleep(55);
-		philos = philos->next;
 		philo_nbr++;
 	}
 }
